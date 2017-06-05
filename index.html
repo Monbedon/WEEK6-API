@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Books</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cyborg/bootstrap.min.css" rel="stylesheet" integrity="sha384-D9XILkoivXN+bcvB2kSOowkIvIcBbNdoDQvfBNsxYAIieZbx8/SI4NeUvrRGCpDi" crossorigin="anonymous">
+</head>
+<body>
+
+<div class= "container">
+
+	<h1>BOOK SEARCH</h1>
+
+	<div id = "books-view"> </div>
+	
+	<br>
+
+	<div id = "buttons-view"> </div>
+
+
+<form id = "book-form">
+	<label>ADD A BOOK</label>
+	<input type="text" id="book-input">
+	<br>
+	<input type="submit" id="add-input" value ="Submit">
+	<br>
+</form>
+	
+<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script type="text/javascript">
+
+var topics =["War + of + the + Worlds", "Alice + and + Wonderland", " Milk and Honey","Hamilton"];
+
+ function displayBookInfo() {
+
+        var book = $(this).attr("data-name");
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=book&api_key=dc6zaTOxFJmzC" + book + "&y=&plot=short&r=json";
+
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).done(function(response) {
+          $("#book-view").html(JSON.stringify(response));
+          renderButtons();
+        
+        var bookDiv = $("<div class='book'>");
+
+        var rating = response.Rated;
+
+        var pOne = $("<p>").text("Rating: " + rating);
+
+        bookDiv.append(pOne);
+
+        var imgURL = response.Book;
+
+        var image = $("<img>").attr("src",imgURL);
+
+        bookDiv.append(Book);
+
+        $("#book-view").prepend(bookDiv);
+
+
+
+        });
+      }	
+
+
+function renderButtons(){
+
+	$("#books-view").empty();
+	for(var i=0; i < topics.length; i++){
+
+		var a= $("<button>");
+
+		a.addClass("book");
+		
+		a.attr("data-name", topics[i]);
+
+		a.text(topics[i]);
+
+		$("#books-view").append(a);
+	}
+}
+
+$("#add-input").on("click",function(event)
+	{
+	event.preventDefault();
+
+	var book = $("#book-input").val().trim();
+
+	topics.push(book);
+	console.log(topics)
+
+	renderButtons();
+
+});	
+
+$(document).on("click",".book",displayBookInfo);
+
+renderButtons();
+		
+
+  </script>
+  </div>
+</body>
+</html>
